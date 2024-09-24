@@ -15,6 +15,8 @@ export default function RootLayout() {
       <Stack>
         <Stack.Screen name="home" options={{ headerShown: false }} />
         <Stack.Screen name="tamagotchiRegister" options={{ headerShown: false }} />
+        <Stack.Screen name="listTamagotchi" options={{ headerShown: false }} />
+        <Stack.Screen name="gameScreen" options={{ headerShown: false }} />
         
       </Stack>
     </SQLiteProvider>

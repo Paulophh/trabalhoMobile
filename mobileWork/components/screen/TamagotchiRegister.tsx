@@ -2,8 +2,14 @@ import { useTodoDatabase } from "@/app/database/initService";
 import { useState } from "react";
 import { Button, StyleSheet, Text, TextInput, View, Image, TouchableOpacity } from "react-native";
 import * as ImagePicker from 'expo-image-picker';
+import { useRouter } from "expo-router";
 
 export default function TamagotchiRegister() {
+  const router = useRouter()
+  const goNextScreen = () => {
+    router.push("/listTamagotchi")
+  }
+
   const [title, setTitle] = useState<string>("");
   const [imageUri, setImageUri] = useState<string>("");
   const { createTamagotchi } = useTodoDatabase();
@@ -59,6 +65,7 @@ export default function TamagotchiRegister() {
       <TouchableOpacity style={styles.button} onPress={create}>
         <Text style={styles.buttonText}>Criar Tomagochi</Text>
       </TouchableOpacity>
+      <Button title='listar tamagotchi' onPress={goNextScreen}/>
     </View>
   );
 }
