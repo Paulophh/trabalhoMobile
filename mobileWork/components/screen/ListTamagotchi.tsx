@@ -19,15 +19,8 @@ export default function ListTamagotchi() {
         router.push("/tamagotchiRegister");
     };
     const playGames = () => {
-        if (selectedTamagotchi && selectedTamagotchi.status === 1) {
-            router.push({
-                pathname: "/gameScreen",
-                params: { id: selectedTamagotchi.ID },
-            });
-            closeModal();
-        } else {
-            Alert.alert("Tamagotchi está morto e não pode mais jogar.");
-        }
+        router.push("/gameScreen");
+        closeModal();
     };
 
     const [data, setData] = useState<Tamagotchi[]>([]);
@@ -58,7 +51,6 @@ export default function ListTamagotchi() {
                 const updatedHappiness = Math.max(tamagotchi.happiness - 1, 0); 
                 const updatedEnergy = Math.max(tamagotchi.energy - 1, 0); 
     
-            
                 const sumAttributes = updatedHunger + updatedHappiness + updatedEnergy;
     
                 if (sumAttributes === 0) {
@@ -80,10 +72,21 @@ export default function ListTamagotchi() {
                     });
                 }
             });
-        }, 3600000); 
+        }, 1000000); 
     
         return () => clearInterval(intervalId); 
     }, [data]);
+
+    const getStatusText = (sumAttributes: number) => {
+        if (sumAttributes === 0) return "Morto";
+        if (sumAttributes >= 1 && sumAttributes <= 50) return "Crítico";
+        if (sumAttributes >= 51 && sumAttributes <= 100) return "Muito Triste";
+        if (sumAttributes >= 101 && sumAttributes <= 150) return "Triste";
+        if (sumAttributes >= 151 && sumAttributes <= 200) return "Ok";
+        if (sumAttributes >= 201 && sumAttributes <= 250) return "Bem";
+        if (sumAttributes >= 251 && sumAttributes <= 300) return "Muito Bem";
+        return "Desconhecido";
+    };
 
     const openModal = (tamagotchi: Tamagotchi) => {
         setSelectedTamagotchi(tamagotchi);
@@ -135,15 +138,19 @@ export default function ListTamagotchi() {
                             <Text style={styles.modalAttribute}>Fome: {selectedTamagotchi.hunger}</Text>
                             <Text style={styles.modalAttribute}>Felicidade: {selectedTamagotchi.happiness}</Text>
                             <Text style={styles.modalAttribute}>Energia: {selectedTamagotchi.energy}</Text>
-                            <Text style={styles.modalAttribute}>Status: {selectedTamagotchi.status === 1 ? "Vivo" : "Morto"}</Text>
+
+                          
+                            <Text style={styles.modalAttribute}>
+                                Status: {getStatusText(selectedTamagotchi.hunger + selectedTamagotchi.happiness + selectedTamagotchi.energy)}
+                            </Text>
+
                             <TouchableOpacity style={styles.closeButton} onPress={closeModal}>
                                 <Text style={styles.closeButtonText}>Fechar</Text>
                             </TouchableOpacity>
-                            {selectedTamagotchi.status === 1 && (
-                                <TouchableOpacity style={styles.playButton} onPress={playGames}>
-                                    <Text style={styles.closeButtonText}>Jogar</Text>
-                                </TouchableOpacity>
-                            )}
+
+                            <TouchableOpacity style={styles.playButton} onPress={playGames}>
+                                <Text style={styles.closeButtonText}>Jogar</Text>
+                            </TouchableOpacity>
                         </View>
                     </View>
                 </Modal>
@@ -197,11 +204,10 @@ const styles = StyleSheet.create({
         color: '#555',
     },
     button: {
-        backgroundColor: '#2196F3',
-        padding: 15,
-        borderRadius: 10,
+        backgroundColor: '#008000',
+        padding: 10,
         alignItems: 'center',
-        marginVertical: 20,
+        
     },
     buttonText: {
         color: '#fff',

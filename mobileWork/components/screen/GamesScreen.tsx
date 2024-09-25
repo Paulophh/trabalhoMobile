@@ -1,9 +1,14 @@
-import { useLocalSearchParams } from 'expo-router';
+import { useLocalSearchParams, useRouter } from 'expo-router';
 import React, { useState, useEffect } from 'react';
 import { View, Text, TextInput, Button, StyleSheet, Alert } from 'react-native';
 import { useTodoDatabase } from "@/app/database/initService"; // Serviço de banco de dados
 
 export default function GamesScreen() {
+
+  const router = useRouter();
+    const goNextScreen = () => {
+        router.push("/listTamagotchi");
+    };
 
  
   const [randomNumber, setRandomNumber] = useState(generateRandomNumber());
@@ -70,6 +75,7 @@ export default function GamesScreen() {
       <Text style={styles.attempts}>Tentativas: {attempts}</Text>
 
       <Button title="Reiniciar Jogo" onPress={resetGame} color="#f00" />
+      <Button title=" Listagem tamagotchi" onPress={goNextScreen} color="#008000" />
     </View>
   );
 }
